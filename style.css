@@ -1,0 +1,10 @@
+/*
+ * 参考
+ * http://coderecipe.jp/recipe/iHjJBJx9Si/
+ */
+
+canvas{
+  display: block;
+  margin: auto;
+  border: 1px solid black;
+}
