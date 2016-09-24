@@ -9,6 +9,7 @@ var lose; // 一番上までいったかどうか
 var interval; // ゲームを操作するタイマーを保持する変数
 var current; // 今操作しているブロックの形
 var currentX,currentY; // 今操作しているブロックの位置
+var score = 0;
 
 // 操作するブロックのパターン
 var shapes = [
@@ -25,6 +26,16 @@ var shapes = [
 var colors = [
   'cyan','orange','blue','yellow','red','green','purple'
 ];
+
+/* 初期読み込み時のスコア処理 */
+window.addEventListener("load",function(){
+  var ctx = document.getElementById('score').getContext("2d");
+  var initmessage = "Your Score";
+
+  ctx.font = "10px 'MS Pゴシック'";
+  ctx.strokeText(initmessage,25,15);
+  ctx.fillText(initmessage,25,15);
+});
 
 // 盤面をまっさらにする
 // 0:何もない 1~ブロック を表す
@@ -139,6 +150,9 @@ function clearLines(){
     // もし1行揃っていたらサウンドを鳴らしてから消す
     if(rowFilled){
       document.getElementById('clearsound').play();
+      // スコア更新
+      drawScore(score+=10);
+
       // その上にあったブロックを1つずつ落としていく
       for(var yy=y; yy>0; --yy){
         for(var x=0; x<COLS; ++x){
@@ -190,10 +204,20 @@ function rotate(current){
   return newCurrent;
 }
 
+/* スコア更新処理 */
+function drawScore(score){
+  var scorecontext = document.getElementById('score').getContext("2d");
+  scorecontext.font = "18px 'MS Pゴシック'";
+  scorecontext.clearRect(30,30,105,100);
+  scorecontext.strokeText(score,50,50);
+  scorecontext.fillText(score,50,50);
+}
+
 // 新しいゲームを始める
 function newGame(){
   clearInterval(interval); // ゲームタイマーをクリア
   init(); // 盤面をまっさらにする
+  drawScore(0);
   newShape(); // 操作ブロックをセット
   lose = false; // 負けフラグ
   interval = setInterval(tick,250); // 250ms毎にtickという関数を呼び出す
